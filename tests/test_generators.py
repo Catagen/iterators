@@ -6,7 +6,7 @@ import json
 class GeneratorTests(unittest.TestCase):
 
     def test_cubes(self):
-        c = iter(Cubes())
+        c = iter(cubes())
         for i in range(1, 1001):
             value = next(c)
             self.assertEqual(c, i ** 3)
@@ -15,7 +15,7 @@ class GeneratorTests(unittest.TestCase):
         with open('tests/data_primes.json') as file:
             data = json.load(file)
 
-        p = iter(Primes())
+        p = iter(primes())
         for prime in data:
             self.assertEqual(next(p), prime)
 

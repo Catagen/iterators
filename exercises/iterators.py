@@ -1,5 +1,7 @@
 """Övningar på iterators"""
 
+from math import sqrt
+
 
 class Cubes():
     """En iterator som skapar en serie med kuber (i ** 3).
@@ -10,7 +12,16 @@ class Cubes():
     Talserien ska inte ha något slut.
 
     """
-    pass
+
+    def __init__(self):
+        self.i = 0
+
+    def __next__(self):
+        self.i += 1
+        return self.i ** 3
+
+    def __iter__(self):
+        return self
 
 
 class Primes():
@@ -19,7 +30,23 @@ class Primes():
     Talserien som förväntas börjar alltså: 2, 3, 5, 7, 11, 13, 17, 19, 23, ...
 
     """
-    pass
+    def __init__(self):
+        self.num = 1
+
+    def _is_prime(self):
+        for i in range(2, int(sqrt(self.num)) + 1):
+            if self.num % i == 0:
+                return False
+        return True
+
+    def __next__(self):
+        self.num += 1
+        while not self._is_prime():
+            self.num += 1
+        return self.num
+
+    def __iter__(self):
+        return self
 
 
 class Fibonacci():
@@ -31,7 +58,30 @@ class Fibonacci():
     Alltså börjar serien: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...
 
     """
-    pass
+    def __init__(self):
+        self.lastnum = 0
+        self.currnum = 1
+        self.i = 0
+
+    def __next__(self):
+
+        if self. i == 0:
+            self.i += 1
+            return 0
+        elif self.i == 1:
+            self.i += 1
+            return 1
+        else:
+            numberone = self.lastnum
+            numbertwo = self.currnum
+
+            self.currnum = numberone + numbertwo
+            self.lastnum = numbertwo
+
+            return self.currnum
+
+    def __iter__(self):
+        return self
 
 
 class Alphabet():
@@ -45,13 +95,51 @@ class Alphabet():
 
     """
 
+    def __init__(self):
+        self.i = -1
+        self.letters = ['Alef', 'Bet', 'Gimel', 'Dalet', 'He', 'Vav', 'Zayin', 'Het', 'Tet', 'Yod', 'Kaf', 'Lamed', 'Mem', 'Nun', 'Samekh', 'Ayin', 'Pe', 'Tsadi', 'Qof', 'Resh', 'Shin', 'Tav']
+
+    def __next__(self):
+        try:
+            self.i += 1
+            return self.letters[self.i]
+        except IndexError:
+            raise StopIteration
+
+    def __iter__(self):
+        return self
 
 class Permutations():
     """En iterator som returnerar alla permutationer av en inmatad sträng.
 
     Då strängen 'abc' matas in fås: 'abc', 'acb', 'bac', 'bca', 'cba', 'cab'
     """
-    pass
+
+    def __init__(self, word):
+        self.oword = list(word)
+        self.nword = []
+        self.i = -1
+
+        self.perm(self.oword)
+
+    def perm(self, a, b=0):
+        if b != len(a):
+            for x in range(b, len(a)):
+                a[b], a[x] = a[x], a[b]
+                self.perm(a, b+1)
+                a[b], a[x] = a[x], a[b]
+        else:
+            self.nword.append(a[:])
+
+    def __next__(self):
+        self.i += 1
+        try:
+            return "".join(self.nword[self.i])
+        except IndexError:
+            raise StopIteration
+
+    def __iter__(self):
+        return self
 
 
 class LookAndSay():
@@ -66,4 +154,44 @@ class LookAndSay():
     1211 läses 'en etta, en tvåa, två ettor', alltså 111221
     111221 läses 'tre ettor, två tvåor, en etta', alltså 312211
     """
-    pass
+
+    def __init__(self, seq):
+        self.sequence = list(str(seq))
+        self.positions = {}
+        self.values = []
+        self.num = ""
+        self.i = 0
+
+        self.generate()
+
+    def generate(self):
+
+        for i, num in enumerate(self.sequence):
+            self.positions[i] = num
+
+        for item1 in self.positions.items():
+            for item2 in self.positions.items():
+                if item1[1] == item2[1] and not abs(item1[0] - item2[0]) > 1 and not item2[0] < item2[0]:
+                    self.values.append()
+
+
+        """for num in self.sequence:
+            if (num, self.sequence.count(num)) not in self.values:
+                self.values.append((num, self.sequence.count(num)))"""
+
+        for tupl in self.values:
+            self.num += str(tupl[1]) + str(tupl[0])
+
+    def __next__(self):
+
+        return self.num
+        raise StopIteration
+
+
+    def __iter__(self):
+        return self
+
+if __name__ == "__main__":
+    r = Permutations('szymon')
+    for x in r:
+        print(x)

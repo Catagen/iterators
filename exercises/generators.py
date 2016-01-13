@@ -1,5 +1,7 @@
 """Övningar på generators"""
 
+from math import sqrt
+
 
 def cubes():
     """Implementera en generator som skapar en serie med kuber (i ** 3).
@@ -10,7 +12,13 @@ def cubes():
     Talserien ska inte ha något slut.
 
     """
-    pass
+    i = 1
+
+    while True:
+
+        yield i**3
+
+        i += 1
 
 
 def primes():
@@ -19,7 +27,6 @@ def primes():
     Talserien som förväntas börjar alltså: 2, 3, 5, 7, 11, 13, 17, 19, 23, ...
 
     """
-    pass
 
 
 def fibonacci():
